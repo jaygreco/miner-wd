@@ -76,9 +76,23 @@ def toggle_GPIO(pin):
 	return
 
 #reset wrapper function
+#intended for use with output pin 37 (IO) and 39 (GND)
 def reset_rig():
-	toggle_GPIO()
+	toggle_GPIO(37)
 	return
 
 #main
 if __name__ == '__main__':
+	while True:
+		#check status
+		if not check_NH_workers('31sJYXu9r6gsHZeTLKNRaBpkoSmc7r7WVC', workers):
+			#there is an issue
+			print "Issue with workers! Resetting..."
+			reset_rig()
+			nonlinear_timeout()
+		else:
+			reset_timeout()
+			
+		#wait before checking again
+		wait(0.5)
+			
