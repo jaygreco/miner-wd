@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 
 #list of workers to watch
 #can be a single worker
-workers = ['k2s0', 'fakeworker']
+workers = ['k2s0']
 
 #function definitions
 #wait function, in hours
