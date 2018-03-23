@@ -6,9 +6,6 @@ import RPi.GPIO as GPIO
 #can be a single worker
 workers = ['k2s0']
 
-#counter to keep track of timeout state
-timeout_counter = 0
-
 #function definitions
 #wait function, in hours
 def wait(hours):
@@ -69,7 +66,7 @@ def toggle_GPIO(pin):
 
 	#wait, set high again
 	time.sleep(2)
-	GPIO.output(channel, GPIO.HIGH)
+	GPIO.output(pin, GPIO.HIGH)
 
 	#switch the gpio back to input
 	GPIO.setup(pin, GPIO.IN)
@@ -83,16 +80,17 @@ def reset_rig():
 
 #main
 if __name__ == '__main__':
-	while True:
-		#check status
-		if not check_NH_workers('31sJYXu9r6gsHZeTLKNRaBpkoSmc7r7WVC', workers):
-			#there is an issue
-			print "Issue with workers! Resetting..."
-			reset_rig()
-			nonlinear_timeout()
-		else:
-			reset_timeout()
+    GPIO.setmode(GPIO.BOARD)
+    timeout_counter = 0
+    while True:
+    	#check status
+    	if not check_NH_workers('31sJYXu9r6gsHZeTLKNRaBpkoSmc7r7WVC', workers):
+	    	#there is an issue
+	    	print "Issue with workers! Resetting..."
+	    	reset_rig()
+	    	nonlinear_timeout()
+    	else:
+    		reset_timeout()
 			
-		#wait before checking again
-		wait(0.5)
-			
+    	#wait before checking again
+    	wait(0.5)			
