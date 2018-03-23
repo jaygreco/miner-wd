@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 
 #list of workers to watch
 #can be a single worker
-workers = ['k2s0']
+workers = ['k2s0', 'fakeworker']
 
 #function definitions
 #wait function, in hours
@@ -49,9 +49,11 @@ def check_NH_workers(addr, workers):
 		j = r.json()
 		for worker in workers:
 			#if worker is not in worker list, return false
-			if worker not in j['result']['workers']:
+                        if not any(worker in sl for sl in j['result']['workers']):
+                        #if worker not in j['result']['workers']:
 				print worker, 'not in worker list!'
-				return False
+				print j['result']['workers']
+                                return False
 	except:
 		#there was an API issue or otherwise
 		pass
@@ -87,7 +89,7 @@ if __name__ == '__main__':
     	if not check_NH_workers('31sJYXu9r6gsHZeTLKNRaBpkoSmc7r7WVC', workers):
 	    	#there is an issue
 	    	print "Issue with workers! Resetting..."
-	    	reset_rig()
+	    	#reset_rig()
 	    	nonlinear_timeout()
     	else:
     		reset_timeout()
