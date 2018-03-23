@@ -2,6 +2,10 @@ import requests
 import time
 import RPi.GPIO as GPIO
 
+#todo: add debug options (no reset)
+#config from ini or other file
+#fix timeout counter
+
 #list of workers to watch
 #can be a single worker
 workers = ['k2s0', 'fakeworker']
@@ -39,7 +43,6 @@ def reset_timeout():
 #checks that all workers passed in workers[] are active.
 #if the workers are not active, a warning is printed and the function returns False
 #returns True if everything is OK
-#NH: 31sJYXu9r6gsHZeTLKNRaBpkoSmc7r7WVC
 def check_NH_workers(addr, workers):
 	#use nicehash api to gather info regarding workers
 	payload = {'method': 'stats.provider.workers', 'addr': addr}
@@ -75,7 +78,7 @@ def toggle_GPIO(pin):
 	return
 
 #reset wrapper function
-#intended for use with output pin 37 (IO) and 39 (GND)
+#intended for use with output pin 37 (IO) and 39 (GND), but any GPIO/GND combo works.
 def reset_rig():
 	toggle_GPIO(37)
 	return
